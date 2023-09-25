@@ -3,14 +3,22 @@ import 'package:flutter/material.dart';
 class MyTextField extends StatefulWidget {
   const MyTextField({
     super.key,
+    this.validator,
     this.hint = "",
     this.obscureText = false,
     this.showToggleIcon = false,
+    this.textInputAction,
+    this.onSubmitted,
+    required this.controller
   });
 
+  final String? Function(String?)? validator;
+  final controller;
   final String hint;
   final bool obscureText;
   final bool showToggleIcon;
+  final TextInputAction? textInputAction;
+  final Function(String)? onSubmitted;
 
   @override
   State<MyTextField> createState() {
@@ -24,6 +32,10 @@ class _MyTextField extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: widget.textInputAction,
+      onFieldSubmitted: widget.onSubmitted,
+      controller: widget.controller,
+      validator: widget.validator ,
       obscureText: widget.obscureText && showToggleIconVisible,
       decoration: InputDecoration(
           suffixIcon: suffixIcon(),
