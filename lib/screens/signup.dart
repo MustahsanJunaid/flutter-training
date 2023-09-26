@@ -36,8 +36,8 @@ class Signup extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.26),
-        const Text("Sign Up", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.30),
+        const Text("Sign Up", style: TextStyle(color: Colors.white, fontSize: 40)),
         SizedBox(height: MediaQuery.of(context).size.height * 0.02),
         BlurContainer(
           child: Form(
@@ -92,7 +92,7 @@ class Signup extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       MyButtonAgree(
                         text: "Agree and Continue",
                         onTap: () {

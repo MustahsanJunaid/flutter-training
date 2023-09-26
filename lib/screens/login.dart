@@ -6,10 +6,13 @@ import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
 import 'package:training/navigation/navigation_service.dart';
 import 'package:training/screens/home.dart';
+import 'package:training/screens/reset_password.dart';
 import 'package:training/screens/signup.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
+
+  final navService = NavigationService();
 
   // text editing controllers
   final emailController = TextEditingController();
@@ -20,9 +23,15 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthContainer(
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.46),
-        const Text('Login', style: TextStyle(color: Colors.white, fontSize: 30)),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+        SizedBox(height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.40),
+        const Text('Login', style: TextStyle(color: Colors.white, fontSize: 40)),
+        SizedBox(height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.04),
         BlurContainer(
           child: Form(
             key: _formKey,
@@ -37,32 +46,53 @@ class LoginScreen extends StatelessWidget {
                     validator: validateEmail,
                     controller: emailController,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  SizedBox(height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.02),
                   MyTextField(
                     hint: "Password",
                     obscureText: true,
                     showToggleIcon: true,
                     textInputAction: TextInputAction.done,
-                    onSubmitted: (value) => {
-                      signUserIn(context, emailController.text)
-                    },
+                    onSubmitted: (value) => {},
                     validator: validatePassword,
                     controller: passwordController,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  SizedBox(height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.02),
                   MyButtonAgree(
                     onTap: () => signUserIn(context, emailController.text),
                     text: "Login",
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  const Align(
+                  SizedBox(height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.02),
+                  Align(
                     alignment: Alignment.centerRight,
-                    child: Text('Forgot Password?',
+                    child: GestureDetector(
+                      child: const Text(
+                        'Forgot Password?',
                         style: TextStyle(
                             color: Color.fromARGB(255, 71, 233, 133), fontWeight: FontWeight.bold, fontSize: 20),
-                        textAlign: TextAlign.start),
+                        textAlign: TextAlign.start,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
+                        );
+                        // navService.navigateTo('/reset_password');
+                      },
+                    ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                  SizedBox(height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.03),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     // ignore: prefer_const_literals_to_create_immutables
@@ -74,7 +104,8 @@ class LoginScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
-                        onTap: () => {
+                        onTap: () =>
+                        {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Signup()),
@@ -129,14 +160,13 @@ class LoginScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context, "Okay");
-              NavigationService().navigateTo('home');
             },
             child: const Text('OK'),
           ),
         ],
       );
-      if(result == 'Okay'){
-        NavigationService().navigateTo('/home', arguments: email);
+      if (result == 'Okay') {
+        navService.navigateTo('/home', arguments: email);
       }
       print(' valid');
     } else {
@@ -147,11 +177,12 @@ class LoginScreen extends StatelessWidget {
   Future<String?> _showDialog(BuildContext context, String title, String content, List<Widget> actions) {
     return showDialog<String>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(title),
-        content: Text(content),
-        actions: actions,
-      ),
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: actions,
+          ),
     );
   }
 }
