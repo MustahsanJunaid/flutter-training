@@ -7,7 +7,11 @@ class NavigationService{
     return navigatorKey.currentState?.pushNamed(routName, arguments: arguments);
   }
 
-  dynamic goBack() {
+  dynamic replaceTo(String routName, {Object? arguments}){
+    return navigatorKey.currentState?.pushReplacementNamed(routName, arguments: arguments);
+  }
+
+  void goBack() {
     return navigatorKey.currentState?.pop();
   }
 }
