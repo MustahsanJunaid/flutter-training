@@ -116,28 +116,28 @@ class LoginScreen extends StatelessWidget {
   }
 
   void signUserIn(BuildContext context, String email) async {
-    if (_formKey.currentState!.validate()) {
-      String? result = await _showDialog(
-        context,
-        "Login Successful",
-        "Congratulations, you've successfully logged into futuristic application",
-        [
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, "Okay");
-              NavigationService().navigateTo('home');
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      );
-      if(result == 'Okay'){
-        NavigationService().navigateTo('/home', arguments: email);
-      }
+    // if (_formKey.currentState!.validate()) {
+    //   String? result = await _showDialog(
+    //     context,
+    //     "Login Successful",
+    //     "Congratulations, you've successfully logged into futuristic application",
+    //     [
+    //       TextButton(
+    //         onPressed: () => Navigator.pop(context, 'Cancel'),
+    //         child: const Text('Cancel'),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.pop(context, "Okay");
+    //           NavigationService().navigateTo('home');
+    //         },
+    //         child: const Text('OK'),
+    //       ),
+    //     ],
+    //   );
+    //   if(result == 'Okay'){
+    //     NavigationService().navigateTo('/home', arguments: email);
+    //   }
       print(' valid');
     } else {
       print('not valid');

@@ -60,7 +60,8 @@ class _MyTextField extends State<MyTextField> {
   GestureDetector? suffixIcon() {
     if (widget.showToggleIcon) {
       return GestureDetector(
-          child: Icon(showToggleIconVisible ? Icons.visibility_off : Icons.visibility),
+          child: Icon(showToggleIconVisible ? Icons.visibility_off : Icons.visibility,
+          color: Colors.green,),
           onTap: () => {
                 setState(() {
                   showToggleIconVisible = !showToggleIconVisible;
