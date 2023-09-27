@@ -38,6 +38,7 @@ dependencies:
   email_validator: ^2.1.16
   google_fonts: ^6.1.0
   get_it: ^7.6.4
+  firebase_auth: ^4.10.0
 
 dev_dependencies:
   flutter_test:

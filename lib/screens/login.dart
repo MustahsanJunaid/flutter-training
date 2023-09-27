@@ -6,7 +6,7 @@ import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
 import 'package:training/di/locator.dart';
 import 'package:training/navigation/navigation_service.dart';
-import 'package:training/screens/home.dart';
+import 'package:training/navigation/routes.dart';
 import 'package:training/screens/reset_password.dart';
 import 'package:training/screens/signup.dart';
 
@@ -39,6 +39,7 @@ class LoginScreen extends StatelessWidget {
                     hint: "Email",
                     textInputAction: TextInputAction.next,
                     validator: validateEmail,
+                    keyboardType: TextInputType.emailAddress,
                     controller: emailController,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -66,13 +67,7 @@ class LoginScreen extends StatelessWidget {
                             color: Color.fromARGB(255, 71, 233, 133), fontWeight: FontWeight.bold, fontSize: 20),
                         textAlign: TextAlign.start,
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-                        );
-                        // navService.navigateTo('/reset_password');
-                      },
+                      onTap: () => navService.navigateTo(Routes.resetPassword),
                     ),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.03),
@@ -87,16 +82,14 @@ class LoginScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
-                        onTap: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Signup()),
-                          )
-                        },
-                        child: const Text(
+                        onTap: () => navService.navigateTo(Routes.signup),
+                        child: Text(
                           'Sign Up',
                           style: TextStyle(
-                              color: Color.fromARGB(255, 71, 233, 133), fontWeight: FontWeight.bold, fontSize: 20),
+                            color: Theme.of(context).colorScheme.primaryContainer,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
                       )
                     ],
@@ -148,7 +141,7 @@ class LoginScreen extends StatelessWidget {
         ],
       );
       if (result == 'Okay') {
-        navService.navigateTo('/home', arguments: email);
+        navService.replaceTo(Routes.category, arguments: email);
         //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(email: emailController.text,)));
       }
       print(' valid');

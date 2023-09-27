@@ -4,10 +4,13 @@ import 'package:training/components/auth_container.dart';
 import 'package:training/components/blur_container.dart';
 import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
+import 'package:training/di/locator.dart';
 import 'package:training/navigation/navigation_service.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
   ResetPasswordScreen({super.key});
+
+  final NavigationService navService = locator<NavigationService>();
 
   // text editing controllers
   final emailController = TextEditingController();

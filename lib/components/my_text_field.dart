@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatefulWidget {
-  const MyTextField({
-    super.key,
-    this.validator,
-    this.hint = "",
-    this.obscureText = false,
-    this.showToggleIcon = false,
-    this.textInputAction,
-    this.onSubmitted,
-    required this.controller
-  });
+  MyTextField(
+      {super.key,
+      this.validator,
+      this.hint = "",
+      this.obscureText = false,
+      this.showToggleIcon = false,
+      this.textInputAction,
+      this.onSubmitted,
+      this.keyboardType = TextInputType.text,
+      required this.controller});
 
   final String? Function(String?)? validator;
   final controller;
   final String hint;
+  final TextInputType keyboardType;
   final bool obscureText;
   final bool showToggleIcon;
   final TextInputAction? textInputAction;
   final Function(String)? onSubmitted;
+
+  bool showToggleIconVisible = true;
 
   @override
   State<MyTextField> createState() {
@@ -27,16 +30,20 @@ class MyTextField extends StatefulWidget {
 }
 
 class _MyTextField extends State<MyTextField> {
-  bool showToggleIconVisible = true;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       onFieldSubmitted: widget.onSubmitted,
       controller: widget.controller,
-      validator: widget.validator ,
-      obscureText: widget.obscureText && showToggleIconVisible,
+      validator: widget.validator,
+      obscureText: widget.obscureText && widget.showToggleIconVisible,
       decoration: InputDecoration(
           suffixIcon: suffixIcon(),
           enabledBorder: OutlineInputBorder(
@@ -60,11 +67,13 @@ class _MyTextField extends State<MyTextField> {
   GestureDetector? suffixIcon() {
     if (widget.showToggleIcon) {
       return GestureDetector(
-          child: Icon(showToggleIconVisible ? Icons.visibility_off : Icons.visibility,
-          color: Colors.green,),
+          child: Icon(
+            widget.showToggleIconVisible ? Icons.visibility_off : Icons.visibility,
+            color: Colors.green,
+          ),
           onTap: () => {
                 setState(() {
-                  showToggleIconVisible = !showToggleIconVisible;
+                  widget.showToggleIconVisible = !widget.showToggleIconVisible;
                 })
               });
     } else {

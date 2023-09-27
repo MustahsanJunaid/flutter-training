@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training/navigation/routes.dart';
 import 'package:training/screens/home.dart';
 import 'package:training/screens/login.dart';
 import 'package:training/screens/reset_password.dart';
@@ -6,14 +7,14 @@ import 'package:training/screens/signup.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoutes(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
+    switch (Routes.values.byName(settings.name ?? '')) {
+      case Routes.login:
         return MaterialPageRoute(builder: (context) => LoginScreen());
-      case '/signup':
+      case Routes.signup:
         return MaterialPageRoute(builder: (context) => Signup());
-      case '/reset_password':
+      case Routes.resetPassword:
         return MaterialPageRoute(builder: (context) => ResetPasswordScreen());
-      case '/home':
+      case Routes.category:
         return MaterialPageRoute(builder: (context) => HomeScreen(email: settings.arguments as String?));
 
       default:

@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:training/components/auth_container.dart';
 import 'package:training/components/blur_container.dart';
 import 'package:training/components/my_text_field.dart';
+import 'package:training/di/locator.dart';
+import 'package:training/navigation/navigation_service.dart';
+import 'package:training/navigation/routes.dart';
 import '../components/my_button.dart';
 import 'login.dart';
 
 class Signup extends StatelessWidget {
   Signup({super.key});
+
+  final NavigationService navService = locator<NavigationService>();
 
   // text editing controllers
   final usernameController = TextEditingController();
@@ -33,7 +38,7 @@ class Signup extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios),
           color: Colors.white,
           onPressed: () {
-            Navigator.pop(context);
+            navService.goBack();
           },
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.30),
@@ -58,6 +63,7 @@ class Signup extends StatelessWidget {
                   MyTextField(
                     controller: usernameController,
                     hint: 'Email',
+                    keyboardType: TextInputType.emailAddress,
                     obscureText: false,
                   ),
 
@@ -96,7 +102,7 @@ class Signup extends StatelessWidget {
                       MyButtonAgree(
                         text: "Agree and Continue",
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                          navService.replaceToByClearingStack(Routes.category);
                         },
                       ),
                     ],
