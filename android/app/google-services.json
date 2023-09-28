@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "125207472995",
+    "project_id": "flutter-training-efce7",
+    "storage_bucket": "flutter-training-efce7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125207472995:android:b98f0be3a43288fb564156",
+        "android_client_info": {
+          "package_name": "com.example.training"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpr9U-xUkxpa5cDyAi_UwfnyWPAQHtWPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

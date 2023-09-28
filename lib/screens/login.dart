@@ -1,14 +1,14 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:training/components/auth_container.dart';
 import 'package:training/components/blur_container.dart';
 import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
 import 'package:training/di/locator.dart';
+import 'package:training/dialog/dialog_util.dart';
 import 'package:training/navigation/navigation_service.dart';
 import 'package:training/navigation/routes.dart';
-import 'package:training/screens/reset_password.dart';
-import 'package:training/screens/signup.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -48,13 +48,13 @@ class LoginScreen extends StatelessWidget {
                     obscureText: true,
                     showToggleIcon: true,
                     textInputAction: TextInputAction.done,
-                    onSubmitted: (value) => {signUserIn(context, emailController.text)},
+                    onSubmitted: (value) => {signUserIn(context, emailController.text, passwordController.text)},
                     validator: validatePassword,
                     controller: passwordController,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   MyButtonAgree(
-                    onTap: () => signUserIn(context, emailController.text),
+                    onTap: () => signUserIn(context, emailController.text, passwordController.text),
                     text: "Login",
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -121,32 +121,21 @@ class LoginScreen extends StatelessWidget {
     }
   }
 
-  void signUserIn(BuildContext context, String email) async {
+  void signUserIn(BuildContext context, String email, password) async {
     if (_formKey.currentState!.validate()) {
-      String? result = await _showDialog(
-        context,
-        "Login Successful",
-        "Congratulations, you've successfully logged into futuristic application",
-        [
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, "Okay");
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      );
-      if (result == 'Okay') {
-        navService.replaceTo(Routes.category, arguments: email);
-        //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(email: emailController.text,)));
-      }
-      print(' valid');
-    } else {
-      print('not valid');
+      DialogUtil.showLoading(context, content: 'Singing in');
+      FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
+        navService.replaceToByClearingStack(Routes.category);
+      }).catchError((error, stackTrace) {
+        navService.goBack();
+        String errorMessage = "";
+        if (error.code == 'wrong-password') {
+          errorMessage = "Please input correct password";
+        } else {
+          errorMessage = "Please input correct credentials";
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
+      });
     }
   }
 

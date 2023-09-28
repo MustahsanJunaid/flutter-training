@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:training/components/auth_container.dart';
 import 'package:training/components/blur_container.dart';
@@ -8,6 +9,7 @@ import 'package:training/di/locator.dart';
 import 'package:training/navigation/navigation_service.dart';
 import 'package:training/navigation/routes.dart';
 import '../components/my_button.dart';
+import '../dialog/dialog_util.dart';
 import 'login.dart';
 
 class Signup extends StatelessWidget {
@@ -16,7 +18,7 @@ class Signup extends StatelessWidget {
   final NavigationService navService = locator<NavigationService>();
 
   // text editing controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -61,7 +63,7 @@ class Signup extends StatelessWidget {
                   const SizedBox(height: 30),
 
                   MyTextField(
-                    controller: usernameController,
+                    controller: emailController,
                     hint: 'Email',
                     keyboardType: TextInputType.emailAddress,
                     obscureText: false,
@@ -102,7 +104,7 @@ class Signup extends StatelessWidget {
                       MyButtonAgree(
                         text: "Agree and Continue",
                         onTap: () {
-                          navService.replaceToByClearingStack(Routes.category);
+                          createUser(context, emailController.text, passwordController.text);
                         },
                       ),
                     ],
@@ -114,5 +116,19 @@ class Signup extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void createUser(BuildContext context, String email, password) async {
+    if (_formKey.currentState!.validate()) {
+      DialogUtil.showLoading(context);
+      FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value) {
+        navService.goBack();
+        navService.replaceToByClearingStack(Routes.category);
+      }).catchError((error, stackTrace) {
+        navService.goBack();
+        String errorMessage = "Please input correct credentials";
+        DialogUtil.showSnackBar(context, errorMessage);
+      });
+    }
   }
 }

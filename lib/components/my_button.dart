@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
   final Function()? onTap;
+  final String text;
 
-  const MyButton({super.key, required this.onTap});
+  const MyButton({super.key, required this.onTap, this.text = "Continue"});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +16,10 @@ class MyButton extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(36),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            "Continue",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+            text,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
           ),
         ),
       ),
@@ -30,6 +30,7 @@ class MyButton extends StatelessWidget {
 class MyButtonAgree extends StatelessWidget {
   final Function()? onTap;
   final String text;
+
   const MyButtonAgree({super.key, required this.onTap, required this.text});
 
   @override
@@ -42,11 +43,10 @@ class MyButtonAgree extends StatelessWidget {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(36),
         ),
-        child:  Center(
+        child: Center(
           child: Text(
             text,
-            style: const TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
           ),
         ),
       ),

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>610252014453-9tgl1a765hl2juvjk7c9p3ik7jkp0n2m.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBMNlD5SJMhZLIFisiKWz4yVPr5d9wb7L8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>610252014453</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.training</string>
+	<key>PROJECT_ID</key>
+	<string>bloodbank-android</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bloodbank-android.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:610252014453:ios:2cf9700555c9c5c6c3493c</string>
+	<key>DATABASE_URL</key>
+	<string>https://bloodbank-android.firebaseio.com</string>
+</dict>
+</plist>
