@@ -15,7 +15,11 @@ class DialogUtil {
               const SizedBox(height: 20),
               const CircularProgressIndicator(),
               const SizedBox(height: 16),
-              Text(content),
+              Text(content,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Theme.of(context).colorScheme.onBackground)),
               const SizedBox(height: 20),
             ],
           ),

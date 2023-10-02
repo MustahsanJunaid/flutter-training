@@ -125,9 +125,9 @@ class LoginScreen extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       DialogUtil.showLoading(context, content: 'Singing in');
       FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
-        navService.replaceToByClearingStack(Routes.category);
+        navService.replaceToByClearingStack(Routes.home);
       }).catchError((error, stackTrace) {
-        navService.goBack();
+        navService.pop();
         String errorMessage = "";
         if (error.code == 'wrong-password') {
           errorMessage = "Please input correct password";

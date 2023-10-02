@@ -50,26 +50,27 @@ class _MyTextField extends State<MyTextField> {
       validator: widget.validator,
       obscureText: widget.obscureText && widget.showToggleIconVisible,
       decoration: InputDecoration(
-          suffixIcon: suffixIcon(),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(36.0),
-            borderSide: BorderSide(color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.5), width: 2),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(36.0),
-            borderSide: const BorderSide(color: Colors.green, width: 2),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(36.0),
-            borderSide: const BorderSide(color: Colors.red, width: 2),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(36.0),
-            borderSide: BorderSide(color: Theme.of(context).disabledColor.withOpacity(0.1), width: 2),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-          hintText: widget.hint),
+        suffixIcon: suffixIcon(),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(36.0),
+          borderSide: BorderSide(color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.5), width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(36.0),
+          borderSide: const BorderSide(color: Colors.green, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(36.0),
+          borderSide: const BorderSide(color: Colors.red, width: 2),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(36.0),
+          borderSide: BorderSide(color: Theme.of(context).disabledColor.withOpacity(0.1), width: 2),
+        ),
+        fillColor: Theme.of(context).colorScheme.secondaryContainer,
+        filled: true,
+        hintText: widget.hint,
+      ),
     );
   }
 

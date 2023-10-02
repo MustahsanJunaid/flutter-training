@@ -40,7 +40,7 @@ class Signup extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios),
           color: Colors.white,
           onPressed: () {
-            navService.goBack();
+            navService.pop();
           },
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.30),
@@ -122,10 +122,10 @@ class Signup extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       DialogUtil.showLoading(context);
       FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value) {
-        navService.goBack();
-        navService.replaceToByClearingStack(Routes.category);
+        navService.pop();
+        navService.replaceToByClearingStack(Routes.home);
       }).catchError((error, stackTrace) {
-        navService.goBack();
+        navService.pop();
         String errorMessage = "Please input correct credentials";
         DialogUtil.showSnackBar(context, errorMessage);
       });

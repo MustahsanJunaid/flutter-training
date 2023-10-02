@@ -1,5 +1,10 @@
-
-
-enum Routes{
-  login, signup, resetPassword, category, categoryDetail, createCategory, profile
+enum Routes {
+  login,
+  signup,
+  home,
+  resetPassword,
+  categoryDetail,
+  createCategory,
+  updateCategory,
+  profile,
 }

@@ -90,7 +90,7 @@ class ResetPasswordScreen extends StatelessWidget {
         ],
       );
       if(result == 'Reset'){
-        NavigationService().goBack();
+        NavigationService().pop();
       }
       print(' valid');
     } else {

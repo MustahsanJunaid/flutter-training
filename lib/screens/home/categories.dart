@@ -1,28 +1,24 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:training/components/category_grid_item.dart';
-import 'package:training/data/dummy_data.dart';
 import 'package:training/dialog/dialog_util.dart';
 import 'package:training/model/category.dart';
-
-import '../di/locator.dart';
-import '../navigation/navigation_service.dart';
-import '../navigation/routes.dart';
+import '../../di/locator.dart';
+import '../../navigation/navigation_service.dart';
+import '../../navigation/routes.dart';
 
 final NavigationService navService = locator<NavigationService>();
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, this.email});
-
-  final String? email;
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final drawerItems = ["Profile", "Home", "Settings", "Sign out"];
+class _CategoryScreenState extends State<CategoryScreen> {
 
   final List<Category> categories = [];
   bool isLoading = true;
@@ -36,76 +32,40 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Plant Categories"),
-        actions: [IconButton(onPressed: () => signOut(context), icon: const Icon(Icons.logout))],
-        //backgroundColor: Theme.of(context).primaryColor,
-      ),
-      drawer: Drawer(
-        child: DrawerList2(
-            items: drawerItems,
-            onItemTap: (position) {
-              onDrawerItemTap(context, position);
-            }),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () => navService.navigateTo(Routes.createCategory),
-        child: const Icon(Icons.add),
-      ),
-      body: GridView(
+
+      body: GridView.builder(
+        itemCount: categories.length,
         padding: const EdgeInsets.all(16.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: MediaQuery.of(context).size.width ~/ 200,
           childAspectRatio: 5 / 3,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
         ),
-        children: [for (final category in categories) CategoryGridItem(category)],
+        itemBuilder: (context, index) => CategoryGridItem(
+          categories[index],
+          onItem: (item) => {
+            navService.navigateTo(Routes.updateCategory, arguments: item),
+          },
+        ),
       ),
     );
   }
 
-  @override
-  void didUpdateWidget(covariant HomeScreen oldWidget) {
-    if (isLoading) {
-      DialogUtil.showLoading(context, content: 'Fetching data...');
-    } else {
-      navService.goBack();
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  void onDrawerItemTap(BuildContext context, int itemIndex) {
-    switch (drawerItems[itemIndex]) {
-      case "Profile":
-        navService.navigateTo(Routes.profile);
-      case "Sign out":
-        signOut(context);
-    }
-  }
-
-  void signOut(BuildContext context) async {
-    DialogUtil.showLoading(context, content: 'Signing out..');
-    await FirebaseAuth.instance.signOut();
-    navService.replaceToByClearingStack(Routes.login);
-  }
-
   void fetchCategories() async {
-    // DialogUtil.showLoading(context, content: 'Fetching Category');
     final user = FirebaseAuth.instance.currentUser!;
     CollectionReference categoryRef = FirebaseFirestore.instance.collection('categories-${user.uid}');
-    var snapshot = await categoryRef.get();
-
-    setState(() {
-      isLoading = false;
+    categoryRef.snapshots().listen((event) {
       categories.clear();
-      for (var element in snapshot.docs) {
-        print("TESTNG FIRESTORE: ${element.data()}");
-        final category = Category(id: element.id, name: element.get("name"), color: Colors.green);
-        categories.add(category);
-      }
+      setState(() {
+        categories.addAll(event.docs
+            .map((e) => Category(docId: e.id, id: e.get("id"), name: e.get("name"), color: Colors.green))
+            .toList());
+      });
+    }, onError: (error) {
+      print("Failed fetching categories");
     });
+
     // navService.goBack();
 
     // categoryRef.get()
@@ -186,14 +146,17 @@ class DrawerListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        navService.goBack();
+        navService.pop();
         onTap();
       },
       child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.w500),
           )),
     );
   }

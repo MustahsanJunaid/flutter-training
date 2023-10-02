@@ -4,21 +4,26 @@ import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:training/dialog/dialog_util.dart';
+import 'package:training/model/category.dart';
 import 'package:training/screens/home/categories.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-class CreateCategory extends StatelessWidget {
-  CreateCategory({super.key});
+class UpdateCategory extends StatelessWidget {
+  UpdateCategory({super.key, this.existingCategory});
+
+  final Category? existingCategory;
 
   final nameController = TextEditingController();
   final idController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = existingCategory?.name ?? "";
+    idController.text = existingCategory?.id ?? "";
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Create Category"),
+          title: const Text("Update Category"),
           //backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Padding(
@@ -42,7 +47,7 @@ class CreateCategory extends StatelessWidget {
               const SizedBox(height: 36),
               MyButton(
                 onTap: () => onSubmit(context),
-                text: "Create",
+                text: "Update",
               ),
               const SizedBox(height: 36),
             ],
@@ -50,19 +55,19 @@ class CreateCategory extends StatelessWidget {
         ));
   }
 
-  void onSubmit(BuildContext context) => createCategory(context);
+  void onSubmit(BuildContext context) => updateCategory(context, existingCategory!.docId!);
 
-  void createCategory(BuildContext context) async {
-    DialogUtil.showLoading(context, content: 'Creating Category');
+  void updateCategory(BuildContext context, String catId) async {
+    DialogUtil.showLoading(context, content: 'Updating Category');
     final user = FirebaseAuth.instance.currentUser!;
-    CollectionReference category = FirebaseFirestore.instance.collection('categories-${user.uid}');
-    category.add({
+    DocumentReference category = FirebaseFirestore.instance.collection('categories-${user.uid}').doc(catId);
+    category.set({
       'name': nameController.text, // John Doe
       'id': idController.text
     }).then((value) {
-      print("Category Added");
+      print("Category Updated");
       navService.pop();
-      DialogUtil.showSnackBar(context, "Category created successfully");
+      DialogUtil.showSnackBar(context, "Category updated successfully");
     }).catchError((error) {
       print("Failed to add user: $error");
       navService.pop();

@@ -13,13 +13,13 @@ class MyButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 16.6),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(36),
         ),
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontWeight: FontWeight.bold, fontSize: 25),
           ),
         ),
       ),
@@ -40,13 +40,13 @@ class MyButtonAgree extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 16.6),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(36),
         ),
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSecondary, fontWeight: FontWeight.bold, fontSize: 25),
           ),
         ),
       ),
