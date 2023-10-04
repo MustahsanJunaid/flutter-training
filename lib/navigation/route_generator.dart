@@ -2,6 +2,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:training/model/category.dart';
 import 'package:training/navigation/routes.dart';
+import 'package:training/screens/category_details_screen.dart';
 import 'package:training/screens/create_category.dart';
 import 'package:training/screens/home/categories.dart';
 import 'package:training/screens/home/home.dart';
@@ -26,7 +27,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => CreateCategory());
       case Routes.updateCategory:
         return MaterialPageRoute(
-          builder: (context) => UpdateCategory(existingCategory: settings.arguments as Category?),
+            builder: (context) => UpdateCategory(existingCategory: settings.arguments as Category));
+      case Routes.categoryDetails:
+        return MaterialPageRoute(
+          builder: (context) => const CategoryDetailsScreen(),
         );
       case Routes.profile:
         return MaterialPageRoute(builder: (context) => const UserProfile());

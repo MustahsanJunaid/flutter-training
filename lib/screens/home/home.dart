@@ -1,6 +1,10 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:training/model/category.dart';
+import 'package:training/providers/selected_category_notifier.dart';
+import 'package:training/screens/category_details_screen.dart';
 import 'package:training/screens/home/screen_breakpoints.dart';
 
 import '../../dialog/dialog_util.dart';
@@ -73,20 +77,32 @@ class WideWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Build of Home is called");
     return const Row(
       children: [
-        CategoryScreen(),
-        Placeholder(),
+        SizedBox(
+          width: 250,
+          child: CategoryScreen(),
+        ),
+        Expanded(
+          child: CategoryDetailsScreen(
+            showAppBar: false,
+          ),
+        ),
       ],
     );
   }
 }
 
-class NarrowWidget extends StatelessWidget {
+class NarrowWidget extends ConsumerWidget {
   const NarrowWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Category? category = ref.watch(selectedCategoryProvider);
+    if(category!=null){
+      navService.navigateTo(Routes.categoryDetails);
+    }
     return const CategoryScreen();
   }
 }

@@ -1,83 +1,74 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training/components/category_grid_item.dart';
-import 'package:training/dialog/dialog_util.dart';
 import 'package:training/model/category.dart';
+import 'package:training/providers/category_provider.dart';
+import 'package:training/providers/selected_category_notifier.dart';
+import 'package:training/screens/home/screen_breakpoints.dart';
 import '../../di/locator.dart';
 import '../../navigation/navigation_service.dart';
-import '../../navigation/routes.dart';
 
 final NavigationService navService = locator<NavigationService>();
 
-class CategoryScreen extends StatefulWidget {
+class CategoryScreen extends ConsumerStatefulWidget {
   const CategoryScreen({super.key});
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
+  ConsumerState<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
-
-  final List<Category> categories = [];
+class _CategoryScreenState extends ConsumerState<CategoryScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
   bool isLoading = true;
 
   @override
   void initState() {
-    fetchCategories();
+    ref.read(categoryListProvider.notifier).fetchData();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+      lowerBound: 0,
+      upperBound: 1,
+    );
+    _animationController.forward();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    List<Category> categories = ref.watch(categoryListProvider);
 
-      body: GridView.builder(
-        itemCount: categories.length,
-        padding: const EdgeInsets.all(16.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: MediaQuery.of(context).size.width ~/ 200,
-          childAspectRatio: 5 / 3,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+    return Scaffold(
+      body: AnimatedBuilder(
+        animation: _animationController,
+        child: GridView.builder(
+          itemCount: categories.length,
+          padding: const EdgeInsets.all(16.0),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: ScreenBreakPoints.isTablet(context) ? 1 : 2,
+            childAspectRatio: 5 / 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+          ),
+          itemBuilder: (context, index) => CategoryGridItem(
+            categories[index],
+            onItem: (item) => ref.read(selectedCategoryProvider.notifier).selectCategory(item.id),
+          ),
         ),
-        itemBuilder: (context, index) => CategoryGridItem(
-          categories[index],
-          onItem: (item) => {
-            navService.navigateTo(Routes.updateCategory, arguments: item),
-          },
+        builder: (context, child) => Padding(
+          padding: EdgeInsets.only(top: 200 - _animationController.value * 200),
+          child: child,
         ),
       ),
     );
   }
 
-  void fetchCategories() async {
-    final user = FirebaseAuth.instance.currentUser!;
-    CollectionReference categoryRef = FirebaseFirestore.instance.collection('categories-${user.uid}');
-    categoryRef.snapshots().listen((event) {
-      categories.clear();
-      setState(() {
-        categories.addAll(event.docs
-            .map((e) => Category(docId: e.id, id: e.get("id"), name: e.get("name"), color: Colors.green))
-            .toList());
-      });
-    }, onError: (error) {
-      print("Failed fetching categories");
-    });
-
-    // navService.goBack();
-
-    // categoryRef.get()
-    //     .then((value) {
-    //   print("User Added");
-    //   navService.goBack();
-    //   DialogUtil.showSnackBar(context, "Category created successfully");
-    // })
-    //     .catchError((error) {
-    //   print("Failed to add user: $error");
-    //   navService.goBack();
-    // });
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
   }
 }
 

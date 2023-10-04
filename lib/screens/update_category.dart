@@ -1,15 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training/components/my_button.dart';
 import 'package:training/components/my_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:training/dialog/dialog_util.dart';
 import 'package:training/model/category.dart';
+import 'package:training/providers/selected_category_notifier.dart';
 import 'package:training/screens/home/categories.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-class UpdateCategory extends StatelessWidget {
+class UpdateCategory extends ConsumerWidget {
   UpdateCategory({super.key, this.existingCategory});
 
   final Category? existingCategory;
@@ -18,7 +20,7 @@ class UpdateCategory extends StatelessWidget {
   final idController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     nameController.text = existingCategory?.name ?? "";
     idController.text = existingCategory?.id ?? "";
     return Scaffold(
@@ -42,11 +44,11 @@ class UpdateCategory extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 controller: nameController,
                 hint: 'Category Name',
-                onSubmitted: (value) => onSubmit(context),
+                onSubmitted: (value) => onSubmit(context, ref),
               ),
               const SizedBox(height: 36),
               MyButton(
-                onTap: () => onSubmit(context),
+                onTap: () => onSubmit(context, ref),
                 text: "Update",
               ),
               const SizedBox(height: 36),
@@ -55,9 +57,9 @@ class UpdateCategory extends StatelessWidget {
         ));
   }
 
-  void onSubmit(BuildContext context) => updateCategory(context, existingCategory!.docId!);
+  void onSubmit(BuildContext context, WidgetRef ref) => updateCategory(context, existingCategory!.docId!, ref);
 
-  void updateCategory(BuildContext context, String catId) async {
+  void updateCategory(BuildContext context, String catId, WidgetRef ref) async {
     DialogUtil.showLoading(context, content: 'Updating Category');
     final user = FirebaseAuth.instance.currentUser!;
     DocumentReference category = FirebaseFirestore.instance.collection('categories-${user.uid}').doc(catId);
@@ -72,5 +74,8 @@ class UpdateCategory extends StatelessWidget {
       print("Failed to add user: $error");
       navService.pop();
     });
+
+
+    ref.read(selectedCategoryProvider.notifier).updateCategory(Category(docId: catId, id: idController.text, name: nameController.text, color: Colors.green));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:training/di/locator.dart';
 import 'package:training/navigation/navigation_service.dart';
 import 'package:training/navigation/route_generator.dart';
@@ -22,8 +23,10 @@ void main() async {
 
 void runMainApp() async {
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(_App(
-    savedThemeMode: savedThemeMode,
+  runApp(ProviderScope(
+    child: _App(
+      savedThemeMode: savedThemeMode,
+    ),
   ));
 }
 

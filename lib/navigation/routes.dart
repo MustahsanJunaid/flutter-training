@@ -3,8 +3,8 @@ enum Routes {
   signup,
   home,
   resetPassword,
-  categoryDetail,
   createCategory,
   updateCategory,
+  categoryDetails,
   profile,
 }
