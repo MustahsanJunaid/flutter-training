@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '125207472995',
     projectId: 'flutter-training-efce7',
     authDomain: 'flutter-training-efce7.firebaseapp.com',
+    databaseURL: 'https://flutter-training-efce7-default-rtdb.firebaseio.com',
     storageBucket: 'flutter-training-efce7.appspot.com',
     measurementId: 'G-9R6B5D5XZS',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:125207472995:android:b98f0be3a43288fb564156',
     messagingSenderId: '125207472995',
     projectId: 'flutter-training-efce7',
+    databaseURL: 'https://flutter-training-efce7-default-rtdb.firebaseio.com',
     storageBucket: 'flutter-training-efce7.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:125207472995:ios:af090694b5c9ff86564156',
     messagingSenderId: '125207472995',
     projectId: 'flutter-training-efce7',
+    databaseURL: 'https://flutter-training-efce7-default-rtdb.firebaseio.com',
     storageBucket: 'flutter-training-efce7.appspot.com',
     iosBundleId: 'com.example.training',
   );
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:125207472995:ios:4bb518d5101b7e72564156',
     messagingSenderId: '125207472995',
     projectId: 'flutter-training-efce7',
+    databaseURL: 'https://flutter-training-efce7-default-rtdb.firebaseio.com',
     storageBucket: 'flutter-training-efce7.appspot.com',
     iosBundleId: 'com.example.training.RunnerTests',
   );

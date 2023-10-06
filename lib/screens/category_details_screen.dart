@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:training/components/my_button.dart';
 import 'package:training/components/title_text.dart';
 import 'package:training/constants.dart';
@@ -21,6 +24,24 @@ class CategoryDetailsScreen extends ConsumerStatefulWidget {
 
 class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
   var isChecked = false;
+  late Widget _imageWidget = FadeInImage.memoryNetwork(
+    placeholder: kTransparentImage,
+    image: backgroundUrl,
+    width: double.infinity,
+    fit: BoxFit.cover,
+    height: 260,
+  );
+
+  void _pickImage() async {
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery, maxWidth: 560);
+    setState(() {
+      if (pickedImage != null) {
+        final pickedImageFile = File(pickedImage.path);
+        _imageWidget = Image.file(pickedImageFile, height: 260, width: double.infinity, fit: BoxFit.cover);
+      }
+    });
+  }
 
   Widget getPlaceholderText(BuildContext context) {
     return Text(
@@ -49,7 +70,7 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
     }
   }
 
-  getMainBody(BuildContext context, Category category) {
+  Widget getMainBody(BuildContext context, Category category) {
     return Padding(
       padding: ScreenBreakPoints.isTablet(context)
           ? const EdgeInsets.only(top: 16.0, right: 16.0, bottom: 16.0)
@@ -65,13 +86,7 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                 children: [
                   Hero(
                     tag: category.id,
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: backgroundUrl,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      height: 260,
-                    ),
+                    child: _imageWidget,
                   ),
                   Positioned(
                     bottom: 0,
@@ -92,6 +107,7 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           InkWell(
+                            onTap: _pickImage,
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Icon(
@@ -121,7 +137,8 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
                     const TitleText(text: "name"),
                     Text(category.name),
                     const Spacer(flex: 1),
-                    MyButton(onTap: () => navService.navigateTo(Routes.updateCategory, arguments: category), text: 'Update'),
+                    MyButton(
+                        onTap: () => navService.navigateTo(Routes.updateCategory, arguments: category), text: 'Update'),
                     const SizedBox(height: 16.0),
                     MyNegativeButton(onTap: _deleteCategory, text: 'Delete')
                   ],
@@ -140,6 +157,5 @@ class _CategoryDetailsScreen extends ConsumerState<CategoryDetailsScreen> {
     });
   }
 
-  _deleteCategory() {
-  }
+  _deleteCategory() {}
 }

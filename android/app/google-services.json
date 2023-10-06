@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "125207472995",
+    "firebase_url": "https://flutter-training-efce7-default-rtdb.firebaseio.com",
     "project_id": "flutter-training-efce7",
     "storage_bucket": "flutter-training-efce7.appspot.com"
   },
